@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Welcome from './Welcome';
-import ugabg from '../assets/uga_building.jpg';
+import bgarch from '../assets/uga_building.jpg';
 
 interface ContentProps {
     children: React.ReactNode;
@@ -11,7 +11,7 @@ interface ContentProps {
     return (
         <div >
         <Image 
-            src={ugabg}
+            src={bgarch}
             alt="Background UGA arch" 
             fill
             priority={true}
