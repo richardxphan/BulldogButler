@@ -2,14 +2,14 @@
 // This is from my Nextjs resources, Navbar_basic
 import Image from 'next/image';
 import logo from '../app/favicon.ico';
-import {useState} from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 // import profileDefault from '@/assets/images/profile.png';
 
 const Navbar = () => {
 
 
-  const [isLoggedIn,setIsLoggedIn ] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     setIsLoggedIn(prev => !prev);
@@ -83,28 +83,33 @@ const Navbar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-         { 
-          !isLoggedIn && (
-                <div className='hidden md:block md:ml-6'>
-                  <div className='flex items-center'>
-                    <button onClick = {handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
+          {
+            !isLoggedIn && (
+              <div className='hidden md:block md:ml-6'>
+                <div className='flex items-center'>
+                  {/*<button onClick = {handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
+                      <span>Login | Register</span>
+                    </button>*/}
+                  <Link href="/login">
+                    <button className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
                       <span>Login | Register</span>
                     </button>
-                  </div>
+                  </Link>
                 </div>
-          )
-        }
+              </div>
+            )
+          }
 
-             {/* <!-- Right Side Menu (Logged In) --> */}
-        { isLoggedIn && (
-                <div className='hidden md:block md:ml-6'>
-                  <div className='flex items-center'>
-                    <button onClick = {handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                </div>
-        )}
+          {/* <!-- Right Side Menu (Logged In) --> */}
+          {isLoggedIn && (
+            <div className='hidden md:block md:ml-6'>
+              <div className='flex items-center'>
+                <button onClick={handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
