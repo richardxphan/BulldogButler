@@ -30,8 +30,8 @@ const Welcome = () => {
           </Link>
         </div>
       </section>
-
     </div>
+
 
 
   );
