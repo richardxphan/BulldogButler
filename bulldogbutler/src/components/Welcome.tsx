@@ -29,7 +29,7 @@ const Welcome = () => {
             </button>
           </Link>
         </div>
-      </section>
+      </section> 
     </div>
 
 
