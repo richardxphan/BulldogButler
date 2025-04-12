@@ -4,17 +4,17 @@ import Image from 'next/image';
 import logo from '../app/favicon.ico';
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 // import profileDefault from '@/assets/images/profile.png';
 
 const Navbar = () => {
-
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const pathname = usePathname();
+  const hideLogin = pathname === '/login' || pathname === '/signup';
 
   const handleLogin = () => {
-    setIsLoggedIn(prev => !prev);
-
-  }
+    setIsLoggedIn((prev) => !prev);
+  };
 
   return (
     <nav className='bg-red-700 border-b-1 border-white'>
@@ -52,11 +52,11 @@ const Navbar = () => {
             {/* <!-- Logo --> */}
             <Link className='flex flex-shrink-0 items-center' href='/'>
               <Image className='h-10 w-auto' src={logo} alt='UGA arch logo' />
-
               <span className='hidden md:block text-white text-2xl font-bold ml-2'>
                 BulldogButler
               </span>
             </Link>
+
             {/* <!-- Desktop Menu Hidden below md screens --> */}
             <div className='hidden md:ml-6 md:block'>
               <div className='flex space-x-2'>
@@ -83,34 +83,32 @@ const Navbar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-          {
-            !isLoggedIn && (
-              <div className='hidden md:block md:ml-6'>
-                <div className='flex items-center'>
-                  {/*<button onClick = {handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
-                      <span>Login | Register</span>
-                    </button>*/}
-                  <Link href="/login">
-                    <button className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
-                      <span>Login | Register</span>
-                    </button>
-                  </Link>
-                </div>
+          {!isLoggedIn && !hideLogin && (
+            <div className='hidden md:block md:ml-6'>
+              <div className='flex items-center'>
+                <Link
+                  href='/login'
+                  className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2 cursor-pointer transition duration-150'
+                >
+                  Login | Register
+                </Link>
               </div>
-            )
-          }
+            </div>
+          )}
 
           {/* <!-- Right Side Menu (Logged In) --> */}
           {isLoggedIn && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                <button onClick={handleLogin} className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'>
+                <button
+                  onClick={handleLogin}
+                  className='flex items-center text-white bg-gray-400 hover:bg-gray-500 hover:text-white rounded-md px-3 py-2'
+                >
                   <span>Logout</span>
                 </button>
               </div>
             </div>
           )}
-
         </div>
       </div>
 
@@ -146,12 +144,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-// const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   // let isLoggedIn = false;
-
-//   const handleLogin = () => {
-//     setIsLoggedIn(prev=>!prev);
-//   }
