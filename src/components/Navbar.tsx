@@ -19,7 +19,7 @@ const Navbar = () => {
   const handleLogout = () => {
     setLoggedIn(false);
     setIsLoggedInState(false);
-    router.push('/login');
+    router.push('/logout');
   };
 
   return (
@@ -35,14 +35,14 @@ const Navbar = () => {
 
           <div className='hidden md:flex space-x-4'>
             <Link href='/' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Home</Link>
-            <Link href='/about' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>About</Link>
-            <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
             {isLoggedIn && (
               <Link href='/request' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Create Request</Link>
             )}
             {isLoggedIn && (
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
             )}
+            <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
+            
           </div>
 
           {!isLoggedIn && !hideLogin && (
