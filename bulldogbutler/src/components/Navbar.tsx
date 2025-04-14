@@ -40,6 +40,9 @@ const Navbar = () => {
             {isLoggedIn && (
               <Link href='/request' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Create Request</Link>
             )}
+            {isLoggedIn && (
+              <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
+            )}
           </div>
 
           {!isLoggedIn && !hideLogin && (

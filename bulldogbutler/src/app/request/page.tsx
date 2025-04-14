@@ -8,7 +8,7 @@ export default function MakeRequestPage() {
 
   return (
     <div className="min-h-screen bg-white py-10 px-6">
-      <h1 className="text-2xl font-bold text-center text-red-700 mb-8">Make A Request</h1>
+      <h1 className="text-2xl font-bold text-center text-red-700 mb-8">Create A Request</h1>
 
       <form className="max-w-xl mx-auto bg-gray-100 p-6 rounded-xl shadow-md space-y-5">
 
