@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import logo from '../app/favicon.ico';
+import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -27,7 +28,7 @@ const Navbar = () => {
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
         <div className='relative flex h-20 items-center justify-between'>
           <Link className='flex items-center' href='/'>
-            <Image className='h-10 w-auto' src={logo} alt='UGA arch logo' />
+            <Image className='h-10 w-auto bg-white rounded' src={logonoBG} alt='UGA in a Suit' />
             <span className='hidden md:block text-white text-2xl font-bold ml-2'>
               BulldogButler
             </span>
