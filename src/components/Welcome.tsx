@@ -24,7 +24,7 @@ const Welcome = () => {
           <p className="text-lg md:text-xl mb-6 max-w-xl">
             Your solution for quick, reliable help with everyday tasks, provided by fellow UGA students.
           </p>
-          <Link href="/login">
+          <Link href="/signup">
             <button className="bg-black px-6 py-3 rounded-md text-white hover:bg-gray-800 text-lg">
               Get Started
             </button>
