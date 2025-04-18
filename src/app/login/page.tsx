@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar';
-import { setLoggedIn } from '../../auth';
+import { useAuth } from '../../context/AuthContext';
 
 
 export default function LoginPage() {
@@ -12,22 +12,31 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const res = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
-
+  
     if (res?.error) {
       setError('Invalid email or password');
     } else {
-      router.push('/dashboard'); // route to protected page
-    }
+      const sessionRes = await fetch('/api/auth/session');
+      const sessionData = await sessionRes.json();
+  
+      const userId = sessionData?.user?.id || sessionData?.user?.email;
+  
+      if (userId) {
+        login(userId);
+      }
 
+      router.push('/dashboard');
+    }
   };
 
   return (
@@ -71,11 +80,16 @@ export default function LoginPage() {
               Sign In
             </button>
 
-            <a href="/dashboard"
+            <button
+              type="button"
+              onClick={() => {
+                login('123'); // or any temp user ID
+                router.push('/dashboard');
+              }}
               className="w-full bg-red-800 text-white text-center py-2 rounded-lg hover:bg-red-900 transition font-semibold tracking-wide"
             >
               Temp Sign In
-            </a>
+            </button>
           </form>
 
           <p className="text-xs text-center text-gray-500 mt-6">

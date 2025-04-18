@@ -2,14 +2,15 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { setLoggedIn } from '../../auth';
+import { useAuth } from '../../context/AuthContext'; 
 
 export default function LogoutPage() {
   const router = useRouter();
+  const { logout } = useAuth(); 
 
   useEffect(() => {
-    setLoggedIn(false);
-  }, []);
+    logout(); 
+  }, [logout]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-center px-4">
