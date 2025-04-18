@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext'; 
+import { getLoggedIn, getCurrentUserId } from '../../auth';
 
 type Item = {
   _id: string;
@@ -18,21 +18,36 @@ type Item = {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { isLoggedIn, userId } = useAuth(); 
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (typeof window === 'undefined') return;
+  
+    if (!getLoggedIn()) {
       router.push('/login');
       return;
     }
-
+  
+    const userId = getCurrentUserId();
     if (!userId) return;
-
+  
+    setLoading(true);
     fetch(`/api/items?userId=${userId}`)
       .then((res) => res.json())
-      .then((data) => setItems(data));
-  }, [isLoggedIn, userId]); 
+      .then((data) => {
+        setItems(data);
+        setLoading(false);
+      });
+  }, []);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-gray-600 text-lg">Loading your dashboard...</p>
+      </div>
+    );
+  }  
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-6">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Button from './Button';
+import { getCurrentUserId } from '../../auth';
 
 export default function MakeRequestPage() {
   const [location, setLocation] = useState('');
@@ -22,8 +23,14 @@ export default function MakeRequestPage() {
       return;
     }
 
+    const userId = getCurrentUserId();
+    if (!userId) {
+      alert('You must be logged in to submit a request.');
+      return;
+    }
+
     const newItem = {
-      userId: '123', 
+      userId, 
       location,
       serviceType: service,
       description,

@@ -5,16 +5,28 @@ import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
+import { getLoggedIn, logout } from '../auth';
 
 const Navbar = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const [isLoggedIn, setIsLoggedInState] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const hideLogin = pathname === '/login' || pathname === '/signup';
 
+  useEffect(() => {
+    setIsLoggedInState(getLoggedIn());
+
+    const handleStorageChange = () => {
+      setIsLoggedInState(getLoggedIn());
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const handleLogout = () => {
-    logout();
+    logout(); 
+    setIsLoggedInState(false); 
     router.push('/logout');
   };
 
@@ -38,7 +50,6 @@ const Navbar = () => {
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
-            
           </div>
 
           {!isLoggedIn && !hideLogin && (
