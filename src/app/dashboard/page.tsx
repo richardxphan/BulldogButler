@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLoggedIn } from '../../auth';
+import { getLoggedIn, getCurrentUserId } from '../../auth';
 
 type Item = {
   _id: string;
@@ -19,16 +19,35 @@ type Item = {
 export default function Dashboard() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+  
     if (!getLoggedIn()) {
       router.push('/login');
+      return;
     }
-
-    fetch('/api/items')
+  
+    const userId = getCurrentUserId();
+    if (!userId) return;
+  
+    setLoading(true);
+    fetch(`/api/items?userId=${userId}`)
       .then((res) => res.json())
-      .then((data) => setItems(data));
+      .then((data) => {
+        setItems(data);
+        setLoading(false);
+      });
   }, []);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-gray-600 text-lg">Loading your dashboard...</p>
+      </div>
+    );
+  }  
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-6">
@@ -47,7 +66,6 @@ export default function Dashboard() {
             />
 
             <div className="p-4 space-y-2">
-              {/* Title & Price */}
               <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold text-gray-900">{item.title}</h2>
                 <span className="text-red-600 font-bold">
@@ -55,15 +73,12 @@ export default function Dashboard() {
                 </span>
               </div>
 
-              {/* Location + Type */}
               <p className="text-sm text-gray-600">
                 📍 {item.location} &nbsp; • &nbsp; 🧺 {item.serviceType}
               </p>
 
-              {/* Description */}
               <p className="text-sm text-gray-700">{item.description}</p>
 
-              {/* Deadline */}
               {item.deadline && (
                 <p className="text-xs text-gray-500">
                   ⏳ Due by:{' '}
@@ -75,7 +90,6 @@ export default function Dashboard() {
                 </p>
               )}
 
-              {/* User */}
               <p className="text-xs text-gray-400">Posted by: {item.userId}</p>
             </div>
           </div>

@@ -5,7 +5,7 @@ import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getLoggedIn, setLoggedIn } from '../auth';
+import { getLoggedIn, logout } from '../auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
@@ -15,11 +15,18 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsLoggedInState(getLoggedIn());
+
+    const handleStorageChange = () => {
+      setIsLoggedInState(getLoggedIn());
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const handleLogout = () => {
-    setLoggedIn(false);
-    setIsLoggedInState(false);
+    logout(); 
+    setIsLoggedInState(false); 
     router.push('/logout');
   };
 
@@ -43,7 +50,6 @@ const Navbar = () => {
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
-            
           </div>
 
           {!isLoggedIn && !hideLogin && (
