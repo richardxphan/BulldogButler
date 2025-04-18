@@ -12,6 +12,25 @@ export default function MakeRequestPage() {
   const [deadline, setDeadline] = useState('');
   const [price, setPrice] = useState('');
 
+  const uploadImageToCloudinary = async (imageFile: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('upload_preset', 'unsigned_upload'); 
+  
+    try {
+      const res = await fetch('https://api.cloudinary.com/v1_1/drrkkkrat/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const data = await res.json();
+      return data.secure_url; 
+    } catch (error) {
+      console.error('Cloudinary upload failed:', error);
+      return null;
+    }
+  };  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -29,6 +48,16 @@ export default function MakeRequestPage() {
       return;
     }
 
+    let imageUrl = 'https://via.placeholder.com/300';
+    if (photo) {
+      const uploadedUrl = await uploadImageToCloudinary(photo);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      } else {
+        alert('Image upload failed. Using placeholder image.');
+      }
+    }
+
     const newItem = {
       userId, 
       location,
@@ -37,7 +66,7 @@ export default function MakeRequestPage() {
       deadline: new Date(deadline),
       price: parsedPrice,
       title: `${service} Request at ${location}`,
-      imageUrl: fakeImageUrl,
+      imageUrl,
     };
   
     try {
