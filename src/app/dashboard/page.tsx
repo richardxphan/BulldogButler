@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLoggedIn, getCurrentUserId } from '../../auth';
+import { getLoggedIn, getCurrentUserId } from '../../lib/auth';
 import Link from 'next/link';
 
 type Item = {

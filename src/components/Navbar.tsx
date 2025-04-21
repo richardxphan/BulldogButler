@@ -5,7 +5,7 @@ import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getLoggedIn, logout } from '../auth';
+import { getLoggedIn, setLoggedIn } from '../lib/auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
@@ -25,7 +25,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout(); 
+    setLoggedIn(false); 
     setIsLoggedInState(false); 
     router.push('/logout');
   };

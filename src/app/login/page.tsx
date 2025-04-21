@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { setLoggedIn } from '../../auth';
+import Navbar from '../../components/Navbar';
+import { setLoggedIn } from '../../lib/auth';
+
 
 export default function LoginPage() {
   const router = useRouter();
