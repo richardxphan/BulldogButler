@@ -1,10 +1,9 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
-import type { NextAuthConfig } from 'next-auth';
-import User from './src/models/UserSchema'; // Rename if your model file is different
+import User from './src/models/UserSchema';
 import dbConnect from './src/lib/dbConnect';
 
-export const authConfig: NextAuthConfig = {
+export const authConfig = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -18,40 +17,51 @@ export const authConfig: NextAuthConfig = {
           password: string;
         };
 
-        // 🔒 Validate inputs
         if (!email || !password || !email.endsWith('@uga.edu')) {
           return null;
         }
 
         await dbConnect();
+
         const user = await User.findOne({ email });
         if (!user) return null;
 
-        const isValid = await compare(password, user.password);
-        if (!isValid) return null;
+        const valid = await compare(password, user.password);
+        if (!valid) return null;
 
         return { id: user._id.toString(), email: user.email };
       },
     }),
   ],
+
   session: {
     strategy: 'jwt',
   },
+
   pages: {
     signIn: '/login',
   },
+
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.id = user.id;
+    async jwt({ token, user }: { token: any; user?: any }) {
+      if (user) {
+        token.id = user.id;
+      }
       return token;
     },
-    async session({ session, token }) {
-      // 🛠 Type-safe workaround to extend session
-      if (session.user && token?.id && typeof token.id === 'string') {
+  
+    async session({ session, token }: { session: any; token: any }) {
+      if (session.user && token?.id) {
         (session.user as { id: string }).id = token.id;
       }
       return session;
     },
-  },
+  
+    async signIn() {
+      return true;
+    },
+  }
+  ,
+
   secret: process.env.NEXTAUTH_SECRET,
 };
