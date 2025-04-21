@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Button from './Button';
+import { getCurrentUserId } from '../../auth';
 
 export default function MakeRequestPage() {
   const [location, setLocation] = useState('');
@@ -11,26 +12,84 @@ export default function MakeRequestPage() {
   const [deadline, setDeadline] = useState('');
   const [price, setPrice] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const uploadImageToCloudinary = async (imageFile: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('upload_preset', 'unsigned_upload'); 
+  
+    try {
+      const res = await fetch('https://api.cloudinary.com/v1_1/drrkkkrat/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const data = await res.json();
+      return data.secure_url; 
+    } catch (error) {
+      console.error('Cloudinary upload failed:', error);
+      return null;
+    }
+  };  
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  
+    const fakeImageUrl = 'https://via.placeholder.com/300'; 
+    const parsedPrice = parseFloat(price);
+
+    if (!price || isNaN(parsedPrice)) {
+      alert('Please enter a valid price');
+      return;
+    }
+
+    const userId = getCurrentUserId();
+    if (!userId) {
+      alert('You must be logged in to submit a request.');
+      return;
+    }
+
+    let imageUrl = 'https://via.placeholder.com/300';
+    if (photo) {
+      const uploadedUrl = await uploadImageToCloudinary(photo);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      } else {
+        alert('Image upload failed. Using placeholder image.');
+      }
+    }
 
     const newItem = {
-      service,
+      userId, 
       location,
+      serviceType: service,
       description,
-      deadline,
-      price,
-      photo
+      deadline: new Date(deadline),
+      price: parsedPrice,
+      title: `${service} Request at ${location}`,
+      imageUrl,
     };
-
-    console.log('New Request:', newItem);
-
-    setLocation('');
-    setService('');
-    setDescription('');
-    setPhoto(null);
-    setDeadline('');
-    setPrice('');
+  
+    try {
+      const res = await fetch('/api/items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newItem),
+      });
+  
+      if (res.ok) {
+        console.log('Item created!');
+        setLocation('');
+        setService('');
+        setDescription('');
+        setPhoto(null);
+        setDeadline('');
+        setPrice('');
+      } else {
+        console.error('Failed to create item');
+      }
+    } catch (err) {
+      console.error('Error submitting form:', err);
+    }
   };
 
   return (
@@ -65,7 +124,7 @@ export default function MakeRequestPage() {
             <option value="">Select your service below</option>
             <option>Trash</option>
             <option>Laundry</option>
-            <option>Groceries</option>
+            <option>Grocery Run</option>
             <option>Room Cleaning</option>
             <option>Bathroom Cleaning</option>
             <option>Moving Furniture</option>
@@ -139,15 +198,18 @@ export default function MakeRequestPage() {
           </div>
           <div className="flex-1">
             <label className="block text-sm font-semibold text-black mb-1">Price</label>
-            <input
-              type="text"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="$25"
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-red-300"
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="25"
+                className="w-full pl-7 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-red-300"
+              />
+            </div>
           </div>
-        </div>
+    </div>
 
         <Button type="submit"> Submit </Button>
       </form>
