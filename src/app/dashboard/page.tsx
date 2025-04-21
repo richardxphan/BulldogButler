@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLoggedIn } from '../../auth';
+import { getLoggedIn } from '../../lib/auth';
 
 type Item = {
   _id: string;
