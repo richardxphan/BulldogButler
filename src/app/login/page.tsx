@@ -34,11 +34,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleTempLogin = () => {
-    setLoggedIn(true, 'temp-user');
-    router.push('/dashboard');
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white border border-gray-200 shadow-xl rounded-2xl p-8">
@@ -80,14 +75,7 @@ export default function LoginPage() {
           >
             Sign In
           </button>
-
-          <button
-            type="button"
-            onClick={handleTempLogin}
-            className="w-full bg-red-800 text-white py-2 rounded-lg hover:bg-red-900 transition font-semibold tracking-wide"
-          >
-            Temp Sign In
-          </button>
+        
         </form>
 
         <p className="text-xs text-center text-gray-500 mt-6">

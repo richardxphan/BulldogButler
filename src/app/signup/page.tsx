@@ -6,6 +6,8 @@ import Navbar from '../../components/Navbar';
 
 export default function SignupPage() {
   const router = useRouter();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,7 +17,7 @@ export default function SignupPage() {
 
     const res = await fetch('/api/signup', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ firstName, lastName, email, password }),
       headers: { 'Content-Type': 'application/json' },
     });
 
@@ -26,6 +28,8 @@ export default function SignupPage() {
       setError(data.message || 'Signup failed');
     }
   };
+
+  const inputStyles = 'w-full border rounded-lg px-4 py-3 text-sm md:text-base text-black placeholder-gray-700 caret-black focus:outline-none focus:ring-2 focus:ring-red-800';
 
   return (
     <>
@@ -40,10 +44,35 @@ export default function SignupPage() {
 
           <form onSubmit={handleSignup} className="space-y-5">
             <div>
+              <label className="block text-sm text-gray-700 mb-1">First Name</label>
+              <input
+                type="text"
+                className={inputStyles}
+                placeholder="John"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-700 mb-1">Last Name</label>
+              <input
+                type="text"
+                className={inputStyles}
+                placeholder="Doe"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
               <label className="block text-sm text-gray-700 mb-1">Email</label>
               <input
                 type="email"
-                className="w-full border rounded-lg px-4 py-3 text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"                placeholder="email12345@uga.edu"
+                className={inputStyles}
+                placeholder="email12345@uga.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -54,7 +83,8 @@ export default function SignupPage() {
               <label className="block text-sm text-gray-700 mb-1">Password</label>
               <input
                 type="password"
-                className="w-full border rounded-lg px-4 py-3 text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"                placeholder="Create a strong password"
+                className={inputStyles}
+                placeholder="Create a strong password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
