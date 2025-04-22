@@ -15,21 +15,18 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsLoggedInState(getLoggedIn());
+
+    const handleStorageChange = () => {
+      setIsLoggedInState(getLoggedIn());
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const handleLogout = () => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    setLoggedIn(false);
-    setIsLoggedInState(false);
-=======
     logout(); 
     setIsLoggedInState(false); 
->>>>>>> parent of 243d199a (Merge pull request #16 from richardxphan/login-backend)
-=======
-    setLoggedIn(false);
-    setIsLoggedInState(false);
->>>>>>> parent of 899d0011 (Merged files)
     router.push('/logout');
   };
 
@@ -51,12 +48,8 @@ const Navbar = () => {
             )}
             {isLoggedIn && (
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
-              )}
-            {isLoggedIn && (
-                <Link href='/profile' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Profile</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
-            
           </div>
 
           {!isLoggedIn && !hideLogin && (
@@ -64,7 +57,6 @@ const Navbar = () => {
               Login | Register
             </Link>
           )}
-        
 
           {isLoggedIn && (
             <button onClick={handleLogout} className='text-white bg-gray-400 hover:bg-gray-500 px-3 py-2 rounded-md'>
