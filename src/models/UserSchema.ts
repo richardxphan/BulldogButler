@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },   // ← new
-  lastName:  { type: String, required: true },   // ← new
+  firstName: { type: String, required: true },   
+  lastName:  { type: String, required: true },   
   email:     { type: String, required: true, unique: true },
   password:  { type: String, required: true },
+  listings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }]
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);
