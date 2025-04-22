@@ -3,10 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getLoggedIn } from '../../lib/auth';
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 899d0011 (Merged files)
 
 type Item = {
   _id: string;
