@@ -8,8 +8,8 @@ const ItemSchema = new Schema({
     enum: [
       'Trash',
       'Laundry',
-      'Room Cleaning',
-      'Bathroom Cleaning',
+      'Cleaning room',
+      'Cleaning bathroom',
       'Grocery Run',
       'Moving Furniture',
       'Tech Help',

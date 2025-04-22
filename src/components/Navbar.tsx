@@ -15,18 +15,11 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsLoggedInState(getLoggedIn());
-
-    const handleStorageChange = () => {
-      setIsLoggedInState(getLoggedIn());
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const handleLogout = () => {
-    setLoggedIn(false); 
-    setIsLoggedInState(false); 
+    setLoggedIn(false);
+    setIsLoggedInState(false);
     router.push('/logout');
   };
 
@@ -50,6 +43,7 @@ const Navbar = () => {
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
+            
           </div>
 
           {!isLoggedIn && !hideLogin && (
