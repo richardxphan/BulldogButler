@@ -51,6 +51,9 @@ const Navbar = () => {
             )}
             {isLoggedIn && (
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
+              )}
+            {isLoggedIn && (
+                <Link href='/profile' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Profile</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
             
@@ -61,6 +64,7 @@ const Navbar = () => {
               Login | Register
             </Link>
           )}
+        
 
           {isLoggedIn && (
             <button onClick={handleLogout} className='text-white bg-gray-400 hover:bg-gray-500 px-3 py-2 rounded-md'>
