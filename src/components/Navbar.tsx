@@ -5,7 +5,7 @@ import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getLoggedIn, setLoggedIn } from '../lib/auth';
+import { getLoggedIn, logout } from '../auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
@@ -18,8 +18,13 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
+<<<<<<< HEAD
     setLoggedIn(false);
     setIsLoggedInState(false);
+=======
+    logout(); 
+    setIsLoggedInState(false); 
+>>>>>>> parent of 243d199a (Merge pull request #16 from richardxphan/login-backend)
     router.push('/logout');
   };
 
