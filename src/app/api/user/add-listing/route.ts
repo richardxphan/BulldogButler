@@ -29,5 +29,5 @@ export async function POST(req: NextRequest) {
     await user.save();
   }
 
-  return NextResponse.json({ message: 'Item added to user listings!' });
+  return NextResponse.json({ message: 'Item added to user listings' });
 }
