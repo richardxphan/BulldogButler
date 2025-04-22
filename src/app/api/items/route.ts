@@ -7,10 +7,10 @@ export async function GET(req: Request) {
     await connectToDB();
 
     const url = new URL(req.url);
-    const userId = url.searchParams.get('userId');
+    const excludeUserId = url.searchParams.get('excludeUserId');
 
-    const items = userId
-      ? await Item.find({ userId })
+    const items = excludeUserId
+      ? await Item.find({ userId: { $ne: excludeUserId } }) 
       : await Item.find({});
 
     return NextResponse.json(items);

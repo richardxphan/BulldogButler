@@ -11,6 +11,8 @@ export default function MakeRequestPage() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [deadline, setDeadline] = useState('');
   const [price, setPrice] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const uploadImageToCloudinary = async (imageFile: File): Promise<string | null> => {
     const formData = new FormData();
@@ -33,21 +35,16 @@ export default function MakeRequestPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
   
-    const fakeImageUrl = 'https://via.placeholder.com/300'; 
     const parsedPrice = parseFloat(price);
-
+  
     if (!price || isNaN(parsedPrice)) {
       alert('Please enter a valid price');
+      setIsSubmitting(false);
       return;
     }
-
-    const userId = getCurrentUserId();
-    if (!userId) {
-      alert('You must be logged in to submit a request.');
-      return;
-    }
-
+  
     let imageUrl = 'https://via.placeholder.com/300';
     if (photo) {
       const uploadedUrl = await uploadImageToCloudinary(photo);
@@ -57,9 +54,8 @@ export default function MakeRequestPage() {
         alert('Image upload failed. Using placeholder image.');
       }
     }
-
+  
     const newItem = {
-      userId, 
       location,
       serviceType: service,
       description,
@@ -70,11 +66,14 @@ export default function MakeRequestPage() {
     };
   
     try {
-      const res = await fetch('/api/items', {
+      const res = await fetch('/api/user/create-listing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newItem),
       });
+  
+      const result = await res.json();
+      console.log("📦 API result:", result);
   
       if (res.ok) {
         console.log('Item created!');
@@ -85,12 +84,15 @@ export default function MakeRequestPage() {
         setDeadline('');
         setPrice('');
       } else {
-        console.error('Failed to create item');
+        console.error('Failed to create item:', result);
       }
     } catch (err) {
       console.error('Error submitting form:', err);
     }
+  
+    setIsSubmitting(false);
   };
+  
 
   return (
     <div className="min-h-screen bg-white py-10 px-6">
@@ -209,9 +211,12 @@ export default function MakeRequestPage() {
               />
             </div>
           </div>
-    </div>
+        </div>
 
-        <Button type="submit"> Submit </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+
       </form>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLoggedIn, getCurrentUserId } from '../../auth';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 type Item = {
@@ -19,33 +19,39 @@ type Item = {
 
 export default function Dashboard() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    console.log("🧠 Session:", session);
 
-    if (!getLoggedIn()) {
+    if (status === 'loading') return;
+
+    if (status === 'unauthenticated' || !session?.user?.email) {
       router.push('/login');
       return;
     }
 
-    const userId = getCurrentUserId();
-    if (!userId) return;
-
-    setLoading(true);
-    fetch(`/api/items?userId=${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchListings = async () => {
+      try {
+        const res = await fetch(`/api/items?excludeUserId=${session?.user?.email}`);
+        const data = await res.json();
         setItems(data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchListings();
+  }, [session, status, router]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-600 text-lg">Loading your dashboard...</p>
+        <p className="text-gray-600 text-lg">Loading the dashboard...</p>
       </div>
     );
   }

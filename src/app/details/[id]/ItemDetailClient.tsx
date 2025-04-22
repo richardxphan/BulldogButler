@@ -31,12 +31,12 @@ export default function ItemDetailClient({ item }: { item: any }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="w-full max-w-2xl bg-white p-6 rounded-2xl shadow-md text-center">
         <img
           src={item.imageUrl || '/placeholder.jpg'}
           alt={item.title}
-          className="w-full h-64 object-cover rounded-lg"
+          className="w-full h-64 object-cover rounded-lg mx-auto"
         />
         <h1 className="text-2xl font-bold text-gray-900 mt-4">{item.title}</h1>
         <p className="text-gray-600 mt-2">{item.description}</p>
@@ -52,7 +52,7 @@ export default function ItemDetailClient({ item }: { item: any }) {
         <button
           onClick={handleAdd}
           disabled={adding}
-          className="mt-6 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+          className="mt-6 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
         >
           {adding ? 'Adding...' : 'Add to My Listings'}
         </button>
