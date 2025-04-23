@@ -23,7 +23,7 @@ const Navbar = () => {
         const res = await fetch('/api/profile');
         if (res.ok) {
           const data = await res.json();
-          setFirstName(data.firstName); // assumes /api/profile returns firstName
+          setFirstName(data.firstName); 
         }
       } catch (err) {
         console.error('Failed to fetch user data:', err);

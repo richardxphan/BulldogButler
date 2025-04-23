@@ -3,8 +3,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ugaDormImg from '../assets/test.jpg';
 import teamPhoto from "../assets/team-photo.jpg";
+import { useEffect, useState } from 'react';
+import { getLoggedIn } from '../auth';
 
 const Welcome = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(getLoggedIn());
+
+    const handleStorageChange = () => {
+      setIsLoggedIn(getLoggedIn());
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   return (
     <div className="min-h-screen font-sans">
       <section className="relative aspect-[16/9] w-full overflow-hidden">
@@ -24,11 +39,14 @@ const Welcome = () => {
           <p className="text-lg md:text-xl mb-6 max-w-xl">
             Your solution for quick, reliable help with everyday tasks, provided by fellow UGA students.
           </p>
-          <Link href="/signup">
-            <button className="bg-black px-6 py-3 rounded-md text-white hover:bg-gray-800 text-lg">
-              Get Started
-            </button>
-          </Link>
+
+          {!isLoggedIn && (
+            <Link href="/signup">
+              <button className="bg-black px-6 py-3 rounded-md text-white hover:bg-gray-800 text-lg">
+                Get Started
+              </button>
+            </Link>
+          )}
         </div>
       </section>
 
@@ -70,9 +88,6 @@ const Welcome = () => {
         </div>
       </section>
     </div>
-
-
-
   );
 };
 
