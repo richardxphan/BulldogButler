@@ -65,10 +65,8 @@ export default function MakeRequestPage() {
       imageUrl,
     };
   
-    // 👉 Store task data in localStorage for after payment
     localStorage.setItem('pendingTask', JSON.stringify(newItem));
   
-    // 👉 Start Stripe Checkout
     try {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -82,7 +80,7 @@ export default function MakeRequestPage() {
       const data = await res.json();
   
       if (data.url) {
-        window.location.href = data.url;   // Redirect to Stripe Checkout
+        window.location.href = data.url;   
       } else {
         alert('Failed to start payment.');
         setIsSubmitting(false);

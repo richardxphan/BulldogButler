@@ -185,7 +185,7 @@ export default function ItemDetailClient({ item }: { item: any }) {
           <p className="mt-2">{form.description}</p>
           <div className="mt-4 space-y-1 text-gray-700">
             <p>🧺 {form.serviceType}</p>
-            <p>💰 ${form.price.toFixed(2)}</p>
+            <p>💰 ${Number(form.price).toFixed(2)}</p>
             <p>⏳ {new Date(form.deadline).toLocaleDateString()}</p>
           </div>
           <div className="mt-4 flex space-x-2">
