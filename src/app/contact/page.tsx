@@ -47,7 +47,7 @@ export default function ContactPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-red-400 focus:border-red-400"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-black focus:ring-red-400 focus:border-red-400"
             />
           </div>
 
@@ -59,7 +59,7 @@ export default function ContactPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-red-400 focus:border-red-400"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-black focus:ring-red-400 focus:border-red-400"
             />
           </div>
 
@@ -71,7 +71,7 @@ export default function ContactPage() {
               value={formData.message}
               onChange={handleChange}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-gray-900 focus:ring-red-400 focus:border-red-400"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-black focus:ring-red-400 focus:border-red-400"
             />
           </div>
 

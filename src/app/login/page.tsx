@@ -49,7 +49,7 @@ export default function LoginPage() {
             <label className="block text-sm text-gray-700 mb-1">Email</label>
             <input
               type="email"
-              className="w-full border rounded-lg px-4 py-3 text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"
+              className="w-full border rounded-lg px-4 py-3 text-black text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"
               placeholder="email12345@uga.edu"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -61,7 +61,7 @@ export default function LoginPage() {
             <label className="block text-sm text-gray-700 mb-1">Password</label>
             <input
               type="password"
-              className="w-full border rounded-lg px-4 py-3 text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"
+              className="w-full border rounded-lg px-4 py-3 text-black text-sm md:text-base placeholder-gray-500 caret-black focus:outline-none focus:ring-2 focus:ring-red-800"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
