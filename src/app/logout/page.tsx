@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { setLoggedIn } from '../../auth';
 
 export default function LogoutPage() {
@@ -10,7 +9,6 @@ export default function LogoutPage() {
 
   useEffect(() => {
     setLoggedIn(false);
-    signOut({ callbackUrl: '/login' }); // Properly clears session cookie
   }, []);
 
   return (
@@ -19,7 +17,7 @@ export default function LogoutPage() {
       <div className="space-x-4">
         <button
           onClick={() => router.push('/')}
-          className="bg-stone-950 text-white px-4 py-2 rounded hover:bg-gray-300"
+          className="bg-stone-950 px-4 py-2 rounded hover:bg-gray-300"
         >
           Go Home
         </button>
