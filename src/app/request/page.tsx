@@ -65,33 +65,35 @@ export default function MakeRequestPage() {
       imageUrl,
     };
   
+    // 👉 Store task data in localStorage for after payment
+    localStorage.setItem('pendingTask', JSON.stringify(newItem));
+  
+    // 👉 Start Stripe Checkout
     try {
-      const res = await fetch('/api/user/create-listing', {
+      const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newItem),
+        body: JSON.stringify({
+          price: parsedPrice,
+          title: newItem.title,
+        }),
       });
   
-      const result = await res.json();
-      console.log("📦 API result:", result);
+      const data = await res.json();
   
-      if (res.ok) {
-        console.log('Item created!');
-        setLocation('');
-        setService('');
-        setDescription('');
-        setPhoto(null);
-        setDeadline('');
-        setPrice('');
+      if (data.url) {
+        window.location.href = data.url;   // Redirect to Stripe Checkout
       } else {
-        console.error('Failed to create item:', result);
+        alert('Failed to start payment.');
+        setIsSubmitting(false);
       }
     } catch (err) {
-      console.error('Error submitting form:', err);
+      console.error('Checkout error:', err);
+      alert('Error processing payment.');
+      setIsSubmitting(false);
     }
-  
-    setIsSubmitting(false);
   };
+  
   
 
   return (
@@ -214,7 +216,7 @@ export default function MakeRequestPage() {
         </div>
 
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
+          {isSubmitting ? "Submitting..." : "Submit and Pay"}
         </Button>
 
       </form>
