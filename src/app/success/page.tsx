@@ -1,4 +1,4 @@
-'use client';   // Only if you're using useEffect or localStorage
+'use client';   
 
 import { useEffect } from 'react';
 
