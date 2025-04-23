@@ -6,7 +6,7 @@ import logonoBG from '../assets/BDnoBG.png';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getLoggedIn, logout } from '../auth';
+import { getLoggedIn } from '../auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
@@ -23,7 +23,7 @@ const Navbar = () => {
         const res = await fetch('/api/profile');
         if (res.ok) {
           const data = await res.json();
-          setFirstName(data.firstName); 
+          setFirstName(data.firstName);
         }
       } catch (err) {
         console.error('Failed to fetch user data:', err);
@@ -43,9 +43,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
-    setIsLoggedInState(false);
-    router.push('/logout');
+    router.push('/logout'); // let the /logout page handle logout logic and UI
   };
 
   return (
@@ -60,8 +58,8 @@ const Navbar = () => {
           </Link>
 
           <div>
-            {isLoggedIn && (     
-              <div className="flex items-center space-x-2 ml-4">      
+            {isLoggedIn && (
+              <div className="flex items-center space-x-2 ml-4">
                 <span className='hidden md:block text-white text-2xl font-bold ml-4'>|</span>
                 <span className='hidden md:block text-white text-2xl font-bold ml-4'>
                   Welcome, {firstName}
