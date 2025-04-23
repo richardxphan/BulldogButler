@@ -9,6 +9,7 @@ export default function LogoutPage() {
   useEffect(() => {
     setLoggedIn(false);
     signOut({ redirect: false }); // no auto-redirect
+    signOut({ callbackUrl: '/login' }); // Properly clears session cookie
   }, []);
 
   return (
@@ -16,7 +17,7 @@ export default function LogoutPage() {
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">You've successfully logged out!</h1>
       <div className="space-x-4">
         <button
-          onClick={() => window.location.href = '/'}
+          onClick={() => router.push('/')}
           className="bg-stone-950 text-white px-4 py-2 rounded hover:bg-gray-300"
         >
           Go Home
