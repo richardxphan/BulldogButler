@@ -1,15 +1,16 @@
 'use client';
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { setLoggedIn } from '../../auth';
 
 export default function LogoutPage() {
+  const router = useRouter();
+
   useEffect(() => {
     setLoggedIn(false);
-    signOut({ redirect: false }); // no auto-redirect
-    signOut({ callbackUrl: '/login' }); // Properly clears session cookie
+    signOut({ redirect: false }).then(() => {
+    });
   }, []);
 
   return (
@@ -23,7 +24,7 @@ export default function LogoutPage() {
           Go Home
         </button>
         <button
-          onClick={() => window.location.href = '/login'}
+          onClick={() => router.push('/login')}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
           Log In
