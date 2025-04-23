@@ -1,4 +1,5 @@
 'use client';
+
 import Image from 'next/image';
 import logo from '../app/favicon.ico';
 import logonoBG from '../assets/BDnoBG.png';
@@ -9,12 +10,29 @@ import { getLoggedIn, logout } from '../auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
+  const [firstName, setFirstName] = useState('');
   const pathname = usePathname();
   const router = useRouter();
   const hideLogin = pathname === '/login' || pathname === '/signup';
 
   useEffect(() => {
     setIsLoggedInState(getLoggedIn());
+
+    const fetchUserName = async () => {
+      try {
+        const res = await fetch('/api/profile');
+        if (res.ok) {
+          const data = await res.json();
+          setFirstName(data.firstName); // assumes /api/profile returns firstName
+        }
+      } catch (err) {
+        console.error('Failed to fetch user data:', err);
+      }
+    };
+
+    if (getLoggedIn()) {
+      fetchUserName();
+    }
 
     const handleStorageChange = () => {
       setIsLoggedInState(getLoggedIn());
@@ -25,8 +43,8 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout(); 
-    setIsLoggedInState(false); 
+    logout();
+    setIsLoggedInState(false);
     router.push('/logout');
   };
 
@@ -36,10 +54,22 @@ const Navbar = () => {
         <div className='relative flex h-20 items-center justify-between'>
           <Link className='flex items-center' href='/'>
             <Image className='h-10 w-auto bg-white rounded' src={logonoBG} alt='UGA in a Suit' />
-            <span className='hidden md:block text-white text-2xl font-bold ml-2'>
+            <span className='hidden md:block text-white text-2xl font-bold ml-4'>
               BulldogButler
             </span>
           </Link>
+
+          <div>
+            {isLoggedIn && (     
+              <div className="flex items-center space-x-2 ml-4">      
+                <span className='hidden md:block text-white text-2xl font-bold ml-4'>|</span>
+                <span className='hidden md:block text-white text-2xl font-bold ml-4'>
+                  Welcome, {firstName}
+                </span>
+                <span className='hidden md:block text-white text-2xl font-bold ml-4'>|</span>
+              </div>
+            )}
+          </div>
 
           <div className='hidden md:flex space-x-4'>
             <Link href='/' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Home</Link>
@@ -48,6 +78,9 @@ const Navbar = () => {
             )}
             {isLoggedIn && (
               <Link href='/dashboard' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Dashboard</Link>
+            )}
+            {isLoggedIn && (
+              <Link href='/profile' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Profile</Link>
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
           </div>

@@ -1,10 +1,10 @@
 export const dynamic = 'force-dynamic';
 
 import { notFound } from 'next/navigation';
-import ItemDetailClient from './ItemDetailClient'; 
+import ItemDetailClient from './ItemDetailClient';
 
 async function fetchItem(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/details?id=${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/personalDetail?id=${id}`, {
     cache: 'no-store',
   });
 
@@ -14,7 +14,6 @@ async function fetchItem(id: string) {
 
 export default async function ItemDetailPage({ params }: { params: { id: string } }) {
   const item = await fetchItem(params.id);
-
   if (!item) return notFound();
 
   return <ItemDetailClient item={item} />;
