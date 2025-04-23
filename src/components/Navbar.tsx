@@ -50,16 +50,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {isLoggedIn && (
-            <div className="flex items-center space-x-2 ml-4">
-              <span className='hidden md:block text-white text-2xl font-bold'>|</span>
-              <span className='hidden md:block text-white text-2xl font-bold'>
-                Welcome, {firstName}
-              </span>
-              <span className='hidden md:block text-white text-2xl font-bold'>|</span>
-            </div>
-          )}
-
           <div className='hidden md:flex space-x-4'>
             <Link href='/' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Home</Link>
             {isLoggedIn && (
@@ -73,6 +63,14 @@ const Navbar = () => {
             )}
             <Link href='/contact' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Contact</Link>
           </div>
+
+          {isLoggedIn && (
+            <div className="flex items-center space-x-2 ml-4">
+              <span className='hidden md:block text-white text-2xl font-bold'>
+                Welcome, {firstName}
+              </span>
+            </div>
+          )}
 
           {!isLoggedIn && !hideLogin && (
             <Link href='/login' className='text-white bg-gray-400 hover:bg-gray-500 px-3 py-2 rounded-md'>
