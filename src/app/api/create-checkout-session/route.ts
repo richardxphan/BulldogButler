@@ -16,7 +16,7 @@ export async function POST(req: Request) {
             product_data: {
               name: title || 'Bulldog Butler Task',
             },
-            unit_amount: Math.round(price * 100) // Convert dollars to cents
+            unit_amount: Math.round(price * 100) 
           },
           quantity: 1,
         },
