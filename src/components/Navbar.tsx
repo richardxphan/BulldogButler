@@ -1,23 +1,21 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '../app/favicon.ico';
 import logonoBG from '../assets/BDnoBG.png';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getLoggedIn } from '../auth';
+import { useSession, signOut } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedInState] = useState(false);
+  const { data: session, status } = useSession();
   const [firstName, setFirstName] = useState('');
   const pathname = usePathname();
   const router = useRouter();
+
   const hideLogin = pathname === '/login' || pathname === '/signup';
 
   useEffect(() => {
-    setIsLoggedInState(getLoggedIn());
-
     const fetchUserName = async () => {
       try {
         const res = await fetch('/api/profile');
@@ -30,20 +28,15 @@ const Navbar = () => {
       }
     };
 
-    if (getLoggedIn()) {
+    if (session?.user?.email) {
       fetchUserName();
     }
+  }, [session]);
 
-    const handleStorageChange = () => {
-      setIsLoggedInState(getLoggedIn());
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  const isLoggedIn = !!session;
 
   const handleLogout = () => {
-    router.push('/logout'); // let the /logout page handle logout logic and UI
+    router.push('/logout');
   };
 
   return (
@@ -57,17 +50,15 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <div>
-            {isLoggedIn && (
-              <div className="flex items-center space-x-2 ml-4">
-                <span className='hidden md:block text-white text-2xl font-bold ml-4'>|</span>
-                <span className='hidden md:block text-white text-2xl font-bold ml-4'>
-                  Welcome, {firstName}
-                </span>
-                <span className='hidden md:block text-white text-2xl font-bold ml-4'>|</span>
-              </div>
-            )}
-          </div>
+          {isLoggedIn && (
+            <div className="flex items-center space-x-2 ml-4">
+              <span className='hidden md:block text-white text-2xl font-bold'>|</span>
+              <span className='hidden md:block text-white text-2xl font-bold'>
+                Welcome, {firstName}
+              </span>
+              <span className='hidden md:block text-white text-2xl font-bold'>|</span>
+            </div>
+          )}
 
           <div className='hidden md:flex space-x-4'>
             <Link href='/' className='text-white px-3 py-2 rounded-md hover:bg-gray-800'>Home</Link>

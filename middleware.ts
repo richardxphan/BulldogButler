@@ -3,32 +3,26 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
-  try {
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-    console.log('🔐 Middleware triggered for:', request.nextUrl.pathname);
-    console.log('🧾 Token:', token);
+  const { pathname } = request.nextUrl;
 
-    const protectedRoutes = ['/dashboard', '/profile', '/request', '/user'];
+  const protectedRoutes = ['/dashboard', '/profile', '/request', '/user'];
 
-    const isProtected = protectedRoutes.some((path) =>
-      request.nextUrl.pathname.startsWith(path)
-    );
+  const isProtected = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
-    if (isProtected && !token) {
-      console.warn('🚫 No valid session. Redirecting to login...');
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
+  const isLogoutPage = pathname.startsWith('/logout');
 
-    return NextResponse.next();
-  } catch (error) {
-    console.error('❌ Middleware error:', error);
-    // Fail-safe: let the request through to prevent full app crash
-    return NextResponse.next();
+  if (isProtected && !token && !isLogoutPage) {
+    return NextResponse.redirect(new URL('/logout', request.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
@@ -37,5 +31,6 @@ export const config = {
     '/profile',
     '/request',
     '/user/:path*',
+    '/logout', 
   ],
 };
