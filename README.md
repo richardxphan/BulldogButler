@@ -26,6 +26,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 # Group Members
 **Rishi Damaraju**
-**Arnav Gupta
-Shaun Saetang
-Richard Phan**
+
+**Arnav Gupta**
+
+**Shaun Saetang**
+
+**Richard Phan**
